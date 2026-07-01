@@ -10,7 +10,7 @@ const Reports: React.FC = () => {
   const [reportData, setReportData] = useState<ReportData | null>(null);
   const [monthlyTrend, setMonthlyTrend] = useState<MonthlyTrend[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPeriod, setSelectedPeriod] = useState('monthly');
+  const [selectedPeriod, setSelectedPeriod] = useState('daily');
   const [customRange, setCustomRange] = useState({ startDate: '', endDate: '' });
   const [useCustomRange, setUseCustomRange] = useState(false);
   const currencySymbol = getCurrencySymbol(user?.currency || 'USD');
@@ -92,6 +92,7 @@ const Reports: React.FC = () => {
               onChange={(e) => setSelectedPeriod(e.target.value)}
               className="input w-48"
             >
+              <option value="all-time">All Time</option>
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
               <option value="monthly">Monthly</option>

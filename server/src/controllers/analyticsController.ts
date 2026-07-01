@@ -49,7 +49,7 @@ export const getDashboardData = async (req: any, res: Response): Promise<void> =
 
 export const getReports = async (req: any, res: Response): Promise<void> => {
   try {
-    const { startDate, endDate, type = 'monthly' } = req.query;
+    const { startDate, endDate, type = 'daily' } = req.query;
 
     let start: Date;
     let end: Date;
@@ -59,7 +59,10 @@ export const getReports = async (req: any, res: Response): Promise<void> => {
       end = new Date(endDate as string);
     } else {
       const now = new Date();
-      if (type === 'daily') {
+      if (type === 'all-time') {
+        start = new Date(0); // Beginning of time
+        end = new Date(); // Now
+      } else if (type === 'daily') {
         start = new Date(now.setHours(0, 0, 0, 0));
         end = new Date(now.setHours(23, 59, 59, 999));
       } else if (type === 'weekly') {
