@@ -13,16 +13,18 @@ const Expenses: React.FC = () => {
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
+  const [pagination, setPagination] = useState({ page: 1, limit: 20, total: 0, pages: 0 });
   const currencySymbol = getCurrencySymbol(user?.currency || 'USD');
 
   useEffect(() => {
     loadExpenses();
   }, []);
 
-  const loadExpenses = async () => {
+  const loadExpenses = async (page = 1) => {
     try {
-      const response = await expenseAPI.getExpenses();
-      setExpenses(response.data);
+      const response = await expenseAPI.getExpenses({ page, limit: pagination.limit });
+      setExpenses(response.data.expenses || response.data);
+      setPagination(response.data.pagination || { page: 1, limit: 20, total: 0, pages: 0 });
     } catch (error) {
       console.error('Failed to load expenses:', error);
     } finally {
@@ -171,6 +173,33 @@ const Expenses: React.FC = () => {
             </tbody>
           </table>
         </div>
+
+        {pagination.pages > 1 && (
+          <div className="flex items-center justify-between mt-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Showing {((pagination.page - 1) * pagination.limit) + 1} to {Math.min(pagination.page * pagination.limit, pagination.total)} of {pagination.total} expenses
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => loadExpenses(pagination.page - 1)}
+                disabled={pagination.page === 1}
+                className="btn btn-secondary disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <span className="px-4 py-2 text-gray-600 dark:text-gray-400">
+                Page {pagination.page} of {pagination.pages}
+              </span>
+              <button
+                onClick={() => loadExpenses(pagination.page + 1)}
+                disabled={pagination.page === pagination.pages}
+                className="btn btn-secondary disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {showModal && (

@@ -3,7 +3,7 @@ import { Income } from '../models';
 
 export const getIncome = async (req: any, res: Response): Promise<void> => {
   try {
-    const { search, source, startDate, endDate, sortBy = 'date', sortOrder = 'desc' } = req.query;
+    const { search, source, startDate, endDate, sortBy = 'date', sortOrder = 'desc', page = 1, limit = 20 } = req.query;
 
     const query: any = { user: req.user._id };
 
@@ -27,9 +27,24 @@ export const getIncome = async (req: any, res: Response): Promise<void> => {
     const sortOptions: any = {};
     sortOptions[sortBy as string] = sortOrder === 'asc' ? 1 : -1;
 
-    const income = await Income.find(query).sort(sortOptions);
+    const pageNum = parseInt(page as string) || 1;
+    const limitNum = parseInt(limit as string) || 20;
+    const skip = (pageNum - 1) * limitNum;
 
-    res.json(income);
+    const [income, total] = await Promise.all([
+      Income.find(query).sort(sortOptions).skip(skip).limit(limitNum),
+      Income.countDocuments(query)
+    ]);
+
+    res.json({
+      income,
+      pagination: {
+        page: pageNum,
+        limit: limitNum,
+        total,
+        pages: Math.ceil(total / limitNum)
+      }
+    });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
   }

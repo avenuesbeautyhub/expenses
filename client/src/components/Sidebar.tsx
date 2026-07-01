@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Wallet, TrendingUp, PieChart, Settings, LogOut, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Wallet, TrendingUp, PieChart, Settings, LogOut, Menu, X, Bell } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Sidebar: React.FC = () => {
@@ -13,6 +13,7 @@ const Sidebar: React.FC = () => {
     { path: '/expenses', icon: Wallet, label: 'Expenses' },
     { path: '/income', icon: TrendingUp, label: 'Income' },
     { path: '/budgets', icon: PieChart, label: 'Budgets' },
+    { path: '/reminders', icon: Bell, label: 'Reminders' },
     { path: '/reports', icon: PieChart, label: 'Reports' },
     { path: '/settings', icon: Settings, label: 'Settings' },
   ];

@@ -11,16 +11,25 @@ const Reports: React.FC = () => {
   const [monthlyTrend, setMonthlyTrend] = useState<MonthlyTrend[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedPeriod, setSelectedPeriod] = useState('monthly');
+  const [customRange, setCustomRange] = useState({ startDate: '', endDate: '' });
+  const [useCustomRange, setUseCustomRange] = useState(false);
   const currencySymbol = getCurrencySymbol(user?.currency || 'USD');
 
   useEffect(() => {
     loadReportData();
     loadMonthlyTrend();
-  }, [selectedPeriod]);
+  }, [selectedPeriod, useCustomRange, customRange]);
 
   const loadReportData = async () => {
     try {
-      const response = await analyticsAPI.getReports({ type: selectedPeriod });
+      let params: any = { type: selectedPeriod };
+      if (useCustomRange && customRange.startDate && customRange.endDate) {
+        params = {
+          startDate: customRange.startDate,
+          endDate: customRange.endDate
+        };
+      }
+      const response = await analyticsAPI.getReports(params);
       setReportData(response.data);
     } catch (error) {
       console.error('Failed to load report data:', error);
@@ -50,16 +59,46 @@ const Reports: React.FC = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Reports</h1>
-        <select
-          value={selectedPeriod}
-          onChange={(e) => setSelectedPeriod(e.target.value)}
-          className="input w-48"
-        >
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
-          <option value="yearly">Yearly</option>
-        </select>
+        <div className="flex items-center gap-4">
+          <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+            <input
+              type="checkbox"
+              checked={useCustomRange}
+              onChange={(e) => setUseCustomRange(e.target.checked)}
+              className="rounded"
+            />
+            Custom Range
+          </label>
+          {useCustomRange && (
+            <div className="flex items-center gap-2">
+              <input
+                type="date"
+                value={customRange.startDate}
+                onChange={(e) => setCustomRange({ ...customRange, startDate: e.target.value })}
+                className="input"
+              />
+              <span className="text-gray-500">to</span>
+              <input
+                type="date"
+                value={customRange.endDate}
+                onChange={(e) => setCustomRange({ ...customRange, endDate: e.target.value })}
+                className="input"
+              />
+            </div>
+          )}
+          {!useCustomRange && (
+            <select
+              value={selectedPeriod}
+              onChange={(e) => setSelectedPeriod(e.target.value)}
+              className="input w-48"
+            >
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="yearly">Yearly</option>
+            </select>
+          )}
+        </div>
       </div>
 
       {reportData && (

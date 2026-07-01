@@ -9,6 +9,8 @@ import expenseRoutes from './routes/expenseRoutes';
 import incomeRoutes from './routes/incomeRoutes';
 import budgetRoutes from './routes/budgetRoutes';
 import analyticsRoutes from './routes/analyticsRoutes';
+import reminderRoutes from './routes/reminderRoutes';
+import insightsRoutes from './routes/insightsRoutes';
 
 const app: Application = express();
 
@@ -31,9 +33,15 @@ app.use('/api/expenses', expenseRoutes);
 app.use('/api/income', incomeRoutes);
 app.use('/api/budgets', budgetRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/reminders', reminderRoutes);
+app.use('/api/insights', insightsRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Expense Tracker API is running' });
+});
+
+app.get('/api', (req, res) => {
+  res.json({ status: 'ok', message: 'Backend is running' });
 });
 
 const PORT = process.env.PORT || 5000;

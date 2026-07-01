@@ -29,6 +29,10 @@ export const authAPI = {
     api.put('/auth/profile', data),
   changePassword: (data: { currentPassword: string; newPassword: string }) =>
     api.put('/auth/change-password', data),
+  forgotPassword: (data: { email: string }) =>
+    api.post('/auth/forgot-password', data),
+  resetPassword: (data: { token: string; newPassword: string }) =>
+    api.post('/auth/reset-password', data),
 };
 
 export const expenseAPI = {
@@ -59,6 +63,19 @@ export const analyticsAPI = {
   getDashboard: () => api.get('/analytics/dashboard'),
   getReports: (params?: any) => api.get('/analytics/reports', { params }),
   getMonthlyTrend: (params?: any) => api.get('/analytics/monthly-trend', { params }),
+};
+
+export const reminderAPI = {
+  getReminders: (params?: any) => api.get('/reminders', { params }),
+  getUpcoming: (params?: any) => api.get('/reminders/upcoming', { params }),
+  getReminderById: (id: string) => api.get(`/reminders/${id}`),
+  createReminder: (data: any) => api.post('/reminders', data),
+  updateReminder: (id: string, data: any) => api.put(`/reminders/${id}`, data),
+  deleteReminder: (id: string) => api.delete(`/reminders/${id}`),
+};
+
+export const insightsAPI = {
+  getInsights: () => api.get('/insights'),
 };
 
 export default api;
