@@ -4,6 +4,7 @@ import { Expense, EXPENSE_CATEGORIES, PAYMENT_METHODS } from '../types';
 import { Plus, Edit2, Trash2, Search } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { getCurrencySymbol } from '../utils/currency';
+import Modal from '../components/Modal';
 
 const Expenses: React.FC = () => {
   const { user } = useAuth();
@@ -249,7 +250,7 @@ const ExpenseModal: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <Modal onClose={onClose}>
       <div className="card max-w-md w-full max-h-[90vh] overflow-y-auto">
         <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
           {expense ? 'Edit Expense' : 'Add Expense'}
@@ -338,7 +339,7 @@ const ExpenseModal: React.FC<{
           </div>
         </form>
       </div>
-    </div>
+    </Modal>
   );
 };
 

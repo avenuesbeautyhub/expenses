@@ -4,6 +4,7 @@ import { Budget, EXPENSE_CATEGORIES } from '../types';
 import { Plus, Edit2, Trash2, AlertTriangle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { getCurrencySymbol } from '../utils/currency';
+import Modal from '../components/Modal';
 
 const Budgets: React.FC = () => {
   const { user } = useAuth();
@@ -103,9 +104,8 @@ const Budgets: React.FC = () => {
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600 dark:text-gray-400">Remaining</span>
                 <span
-                  className={`font-semibold ${
-                    (budget.remaining || 0) < 0 ? 'text-red-600' : 'text-green-600'
-                  }`}
+                  className={`font-semibold ${(budget.remaining || 0) < 0 ? 'text-red-600' : 'text-green-600'
+                    }`}
                 >
                   {currencySymbol}{(budget.remaining || 0).toLocaleString()}
                 </span>
@@ -114,13 +114,12 @@ const Budgets: React.FC = () => {
               <div className="mt-4">
                 <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
                   <div
-                    className={`h-2.5 rounded-full ${
-                      (budget.percentage || 0) > 100
-                        ? 'bg-red-600'
-                        : (budget.percentage || 0) > 80
+                    className={`h-2.5 rounded-full ${(budget.percentage || 0) > 100
+                      ? 'bg-red-600'
+                      : (budget.percentage || 0) > 80
                         ? 'bg-yellow-500'
                         : 'bg-green-600'
-                    }`}
+                      }`}
                     style={{ width: `${Math.min(budget.percentage || 0, 100)}%` }}
                   ></div>
                 </div>
@@ -186,7 +185,7 @@ const BudgetModal: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <Modal onClose={onClose}>
       <div className="card max-w-md w-full">
         <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
           {budget ? 'Edit Budget' : 'Add Budget'}
@@ -258,7 +257,7 @@ const BudgetModal: React.FC<{
           </div>
         </form>
       </div>
-    </div>
+    </Modal>
   );
 };
 

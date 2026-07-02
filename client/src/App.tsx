@@ -15,6 +15,7 @@ import Budgets from './pages/Budgets';
 import Reports from './pages/Reports';
 import Reminders from './pages/Reminders';
 import Settings from './pages/Settings';
+import Debts from './pages/Debts';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
@@ -92,6 +93,16 @@ function App() {
                 <ProtectedRoute>
                   <Layout>
                     <Budgets />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/debts"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Debts />
                   </Layout>
                 </ProtectedRoute>
               }

@@ -3,6 +3,7 @@ import { reminderAPI } from '../services/api';
 import { Plus, Edit2, Trash2, Bell, Calendar, CheckCircle, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { getCurrencySymbol } from '../utils/currency';
+import Modal from '../components/Modal';
 
 const REMINDER_CATEGORIES = ['Rent', 'EMI', 'Utilities', 'Insurance', 'Subscription', 'Credit Card', 'Loan', 'Others'];
 
@@ -171,11 +172,10 @@ const Reminders: React.FC = () => {
               return (
                 <div
                   key={reminder._id}
-                  className={`p-4 rounded-lg border ${
-                    reminder.isPaid
-                      ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
-                      : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
-                  }`}
+                  className={`p-4 rounded-lg border ${reminder.isPaid
+                    ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
+                    : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+                    }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -282,7 +282,7 @@ const ReminderModal: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <Modal onClose={onClose}>
       <div className="card max-w-md w-full max-h-[90vh] overflow-y-auto">
         <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
           {reminder ? 'Edit Reminder' : 'Add Reminder'}
@@ -384,7 +384,7 @@ const ReminderModal: React.FC<{
           </div>
         </form>
       </div>
-    </div>
+    </Modal>
   );
 };
 

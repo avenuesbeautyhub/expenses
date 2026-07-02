@@ -104,7 +104,7 @@ const Dashboard: React.FC = () => {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={(entry) => `${entry.name}: ${currencySymbol}${entry.value}`}
+                label={(entry: any) => `${entry.name}: ${currencySymbol}${entry.value}`}
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
@@ -145,9 +145,8 @@ const Dashboard: React.FC = () => {
             >
               <div className="flex items-center gap-3">
                 <div
-                  className={`p-2 rounded-full ${
-                    transaction.type === 'income' ? 'bg-green-100' : 'bg-red-100'
-                  }`}
+                  className={`p-2 rounded-full ${transaction.type === 'income' ? 'bg-green-100' : 'bg-red-100'
+                    }`}
                 >
                   {transaction.type === 'income' ? (
                     <TrendingUp className="text-green-600" size={20} />
@@ -163,9 +162,8 @@ const Dashboard: React.FC = () => {
                 </div>
               </div>
               <p
-                className={`font-semibold ${
-                  transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
-                }`}
+                className={`font-semibold ${transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
+                  }`}
               >
                 {transaction.type === 'income' ? '+' : '-'}{currencySymbol}{transaction.amount.toLocaleString()}
               </p>

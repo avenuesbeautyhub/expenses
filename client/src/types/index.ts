@@ -51,6 +51,22 @@ export interface Budget {
   updatedAt: string;
 }
 
+export interface Debt {
+  _id: string;
+  user: string;
+  title: string;
+  amount: number;
+  type: 'borrow' | 'lend';
+  personName: string;
+  date: string;
+  dueDate?: string;
+  status: 'pending' | 'partially_returned' | 'returned';
+  returnedAmount: number;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface DashboardData {
   totalBalance: number;
   totalIncome: number;
