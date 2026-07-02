@@ -78,4 +78,13 @@ export const insightsAPI = {
   getInsights: () => api.get('/insights'),
 };
 
+export const debtAPI = {
+  getDebts: (params?: any) => api.get('/debts', { params }),
+  getDebtById: (id: string) => api.get(`/debts/${id}`),
+  createDebt: (data: any) => api.post('/debts', data),
+  updateDebt: (id: string, data: any) => api.put(`/debts/${id}`, data),
+  returnDebt: (id: string, data: { returnedAmount: number }) => api.post(`/debts/${id}/return`, data),
+  deleteDebt: (id: string) => api.delete(`/debts/${id}`),
+};
+
 export default api;

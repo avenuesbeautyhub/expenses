@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Wallet, TrendingUp, PieChart, Settings, LogOut, Menu, X, Bell } from 'lucide-react';
+import { LayoutDashboard, Wallet, TrendingUp, PieChart, Settings, LogOut, Menu, X, Bell, ArrowDownCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Sidebar: React.FC = () => {
@@ -13,6 +13,7 @@ const Sidebar: React.FC = () => {
     { path: '/expenses', icon: Wallet, label: 'Expenses' },
     { path: '/income', icon: TrendingUp, label: 'Income' },
     { path: '/budgets', icon: PieChart, label: 'Budgets' },
+    { path: '/debts', icon: ArrowDownCircle, label: 'Debts' },
     { path: '/reminders', icon: Bell, label: 'Reminders' },
     { path: '/reports', icon: PieChart, label: 'Reports' },
     { path: '/settings', icon: Settings, label: 'Settings' },
@@ -28,9 +29,8 @@ const Sidebar: React.FC = () => {
       </button>
 
       <aside
-        className={`fixed left-0 top-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out z-40 ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        } lg:translate-x-0`}
+        className={`fixed left-0 top-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out z-40 ${isOpen ? 'translate-x-0' : '-translate-x-full'
+          } lg:translate-x-0`}
       >
         <div className="p-6 border-b border-gray-200 dark:border-gray-700">
           <h1 className="text-2xl font-bold text-primary-600">Expense Tracker</h1>
@@ -51,11 +51,10 @@ const Sidebar: React.FC = () => {
                   <Link
                     to={item.path}
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                      isActive
-                        ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300'
-                        : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
-                    }`}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive
+                      ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300'
+                      : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
+                      }`}
                   >
                     <Icon size={20} />
                     <span>{item.label}</span>

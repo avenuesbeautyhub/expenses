@@ -4,6 +4,7 @@ import { Income, INCOME_SOURCES } from '../types';
 import { Plus, Edit2, Trash2, Search } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { getCurrencySymbol } from '../utils/currency';
+import Modal from '../components/Modal';
 
 const IncomePage: React.FC = () => {
   const { user } = useAuth();
@@ -227,7 +228,7 @@ const IncomeModal: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <Modal onClose={onClose}>
       <div className="card max-w-md w-full">
         <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
           {income ? 'Edit Income' : 'Add Income'}
@@ -301,7 +302,7 @@ const IncomeModal: React.FC<{
           </div>
         </form>
       </div>
-    </div>
+    </Modal>
   );
 };
 
