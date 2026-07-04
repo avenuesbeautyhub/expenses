@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: expense-tracker-server
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    env: node
+    region: oregon
+    branch: main
+    numInstances: 1
+    envVars:
+      - key: NODE_VERSION
+        value: 24.14.1
