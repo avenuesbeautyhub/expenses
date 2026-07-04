@@ -29,7 +29,7 @@ export const BackendStatusProvider: React.FC<{ children: ReactNode }> = ({ child
 
   useEffect(() => {
     checkBackend();
-    const interval = setInterval(checkBackend, 10000); // Check every 10 seconds
+    const interval = setInterval(checkBackend, 3000); // Check every 10 seconds
     return () => clearInterval(interval);
   }, []);
 
