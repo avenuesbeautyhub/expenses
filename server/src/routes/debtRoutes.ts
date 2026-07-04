@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { body, validationResult, query } from 'express-validator';
-import { getDebts, getDebtById, createDebt, updateDebt, returnDebt, deleteDebt } from '../controllers/debtController.js';
-import { protect } from '../middleware/auth.js';
+import { getDebts, getDebtById, createDebt, updateDebt, returnDebt, deleteDebt } from '../controllers/debtController';
+import { protect } from '../middleware/auth';
 
 const router = Router();
 

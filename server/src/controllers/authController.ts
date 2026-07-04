@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/index.js';
-import { generateToken } from '../utils/generateToken.js';
+import { User } from '../models/index';
+import { generateToken } from '../utils/generateToken';
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {

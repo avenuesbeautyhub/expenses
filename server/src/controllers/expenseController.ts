@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Expense } from '../models/index.js';
+import { Expense } from '../models/index';
 
 export const getExpenses = async (req: any, res: Response): Promise<void> => {
   try {

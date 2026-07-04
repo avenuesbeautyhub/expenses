@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { getFinancialInsights } from '../controllers/insightsController.js';
-import { protect } from '../middleware/auth.js';
+import { getFinancialInsights } from '../controllers/insightsController';
+import { protect } from '../middleware/auth';
 
 const router = Router();
 

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Reminder } from '../models/index.js';
+import { Reminder } from '../models/index';
 
 export const getReminders = async (req: any, res: Response): Promise<void> => {
   try {

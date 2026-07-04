@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Expense, Income } from '../models/index.js';
+import { Expense, Income } from '../models/index';
 
 export const getDashboardData = async (req: any, res: Response): Promise<void> => {
   try {

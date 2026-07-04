@@ -3,15 +3,15 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import connectDB from './config/database.js';
-import authRoutes from './routes/authRoutes.js';
-import expenseRoutes from './routes/expenseRoutes.js';
-import incomeRoutes from './routes/incomeRoutes.js';
-import budgetRoutes from './routes/budgetRoutes.js';
-import analyticsRoutes from './routes/analyticsRoutes.js';
-import reminderRoutes from './routes/reminderRoutes.js';
-import insightsRoutes from './routes/insightsRoutes.js';
-import debtRoutes from './routes/debtRoutes.js';
+import connectDB from './config/database';
+import authRoutes from './routes/authRoutes';
+import expenseRoutes from './routes/expenseRoutes';
+import incomeRoutes from './routes/incomeRoutes';
+import budgetRoutes from './routes/budgetRoutes';
+import analyticsRoutes from './routes/analyticsRoutes';
+import reminderRoutes from './routes/reminderRoutes';
+import insightsRoutes from './routes/insightsRoutes';
+import debtRoutes from './routes/debtRoutes';
 
 const app: Application = express();
 
@@ -46,7 +46,7 @@ app.get('/api', (req, res) => {
   res.json({ status: 'ok', message: 'Backend is running' });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
