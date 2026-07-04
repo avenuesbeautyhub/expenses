@@ -3,15 +3,15 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import connectDB from './config/database';
-import authRoutes from './routes/authRoutes';
-import expenseRoutes from './routes/expenseRoutes';
-import incomeRoutes from './routes/incomeRoutes';
-import budgetRoutes from './routes/budgetRoutes';
-import analyticsRoutes from './routes/analyticsRoutes';
-import reminderRoutes from './routes/reminderRoutes';
-import insightsRoutes from './routes/insightsRoutes';
-import debtRoutes from './routes/debtRoutes';
+import connectDB from './config/database.js';
+import authRoutes from './routes/authRoutes.js';
+import expenseRoutes from './routes/expenseRoutes.js';
+import incomeRoutes from './routes/incomeRoutes.js';
+import budgetRoutes from './routes/budgetRoutes.js';
+import analyticsRoutes from './routes/analyticsRoutes.js';
+import reminderRoutes from './routes/reminderRoutes.js';
+import insightsRoutes from './routes/insightsRoutes.js';
+import debtRoutes from './routes/debtRoutes.js';
 
 const app: Application = express();
 

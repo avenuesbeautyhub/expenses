@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { body, validationResult, query } from 'express-validator';
-import { getIncome, getIncomeById, createIncome, updateIncome, deleteIncome } from '../controllers/incomeController';
-import { protect } from '../middleware/auth';
+import { getIncome, getIncomeById, createIncome, updateIncome, deleteIncome } from '../controllers/incomeController.js';
+import { protect } from '../middleware/auth.js';
 
 const router = Router();
 

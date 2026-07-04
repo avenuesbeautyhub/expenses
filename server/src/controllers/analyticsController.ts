@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Expense, Income } from '../models';
+import { Expense, Income } from '../models/index.js';
 
 export const getDashboardData = async (req: any, res: Response): Promise<void> => {
   try {
@@ -17,18 +17,18 @@ export const getDashboardData = async (req: any, res: Response): Promise<void> =
       date: { $gte: startDate, $lte: endDate },
     });
 
-    const totalExpenseAmount = totalExpenses.reduce((sum, exp) => sum + exp.amount, 0);
-    const totalIncomeAmount = totalIncome.reduce((sum, inc) => sum + inc.amount, 0);
+    const totalExpenseAmount = totalExpenses.reduce((sum: number, exp: any) => sum + exp.amount, 0);
+    const totalIncomeAmount = totalIncome.reduce((sum: number, inc: any) => sum + inc.amount, 0);
     const savings = totalIncomeAmount - totalExpenseAmount;
 
-    const categoryBreakdown = totalExpenses.reduce((acc: any, expense) => {
+    const categoryBreakdown = totalExpenses.reduce((acc: any, expense: any) => {
       acc[expense.category] = (acc[expense.category] || 0) + expense.amount;
       return acc;
     }, {});
 
     const recentTransactions = [
-      ...totalExpenses.map((e) => ({ ...e.toObject(), type: 'expense' })),
-      ...totalIncome.map((i) => ({ ...i.toObject(), type: 'income' })),
+      ...totalExpenses.map((e: any) => ({ ...e.toObject(), type: 'expense' })),
+      ...totalIncome.map((i: any) => ({ ...i.toObject(), type: 'income' })),
     ]
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
       .slice(0, 10);
@@ -89,21 +89,21 @@ export const getReports = async (req: any, res: Response): Promise<void> => {
       date: { $gte: start, $lte: end },
     });
 
-    const totalExpense = expenses.reduce((sum, exp) => sum + exp.amount, 0);
-    const totalIncome = income.reduce((sum, inc) => sum + inc.amount, 0);
+    const totalExpense = expenses.reduce((sum: number, exp: any) => sum + exp.amount, 0);
+    const totalIncome = income.reduce((sum: number, inc: any) => sum + inc.amount, 0);
     const savings = totalIncome - totalExpense;
 
-    const categoryBreakdown = expenses.reduce((acc: any, expense) => {
+    const categoryBreakdown = expenses.reduce((acc: any, expense: any) => {
       acc[expense.category] = (acc[expense.category] || 0) + expense.amount;
       return acc;
     }, {});
 
     const highestExpense = expenses.length > 0 
-      ? expenses.reduce((max, exp) => exp.amount > max.amount ? exp : max, expenses[0])
+      ? expenses.reduce((max: any, exp: any) => exp.amount > max.amount ? exp : max, expenses[0])
       : null;
 
     const lowestExpense = expenses.length > 0
-      ? expenses.reduce((min, exp) => exp.amount < min.amount ? exp : min, expenses[0])
+      ? expenses.reduce((min: any, exp: any) => exp.amount < min.amount ? exp : min, expenses[0])
       : null;
 
     res.json({
@@ -141,8 +141,8 @@ export const getMonthlyTrend = async (req: any, res: Response): Promise<void> =>
         date: { $gte: startDate, $lte: endDate },
       });
 
-      const totalExpense = expenses.reduce((sum, exp) => sum + exp.amount, 0);
-      const totalIncome = income.reduce((sum, inc) => sum + inc.amount, 0);
+      const totalExpense = expenses.reduce((sum: number, exp: any) => sum + exp.amount, 0);
+      const totalIncome = income.reduce((sum: number, inc: any) => sum + inc.amount, 0);
 
       monthlyData.push({
         month: month + 1,

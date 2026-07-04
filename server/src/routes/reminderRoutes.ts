@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { body, validationResult } from 'express-validator';
-import { getReminders, getReminderById, createReminder, updateReminder, deleteReminder, getUpcomingReminders } from '../controllers/reminderController';
-import { protect } from '../middleware/auth';
+import { getReminders, getReminderById, createReminder, updateReminder, deleteReminder, getUpcomingReminders } from '../controllers/reminderController.js';
+import { protect } from '../middleware/auth.js';
 
 const router = Router();
 

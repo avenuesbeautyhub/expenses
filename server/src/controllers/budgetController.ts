@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Budget, Expense } from '../models';
+import { Budget, Expense } from '../models/index.js';
 
 export const getBudgets = async (req: any, res: Response): Promise<void> => {
   try {
@@ -13,7 +13,7 @@ export const getBudgets = async (req: any, res: Response): Promise<void> => {
     const budgets = await Budget.find(query);
 
     const budgetsWithUsage = await Promise.all(
-      budgets.map(async (budget) => {
+      budgets.map(async (budget: any) => {
         const startDate = new Date(budget.year, budget.month - 1, 1);
         const endDate = new Date(budget.year, budget.month, 0);
 
@@ -23,7 +23,7 @@ export const getBudgets = async (req: any, res: Response): Promise<void> => {
           date: { $gte: startDate, $lte: endDate },
         });
 
-        const totalSpent = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+        const totalSpent = expenses.reduce((sum: number, expense: any) => sum + expense.amount, 0);
         const remaining = budget.amount - totalSpent;
         const percentage = budget.amount > 0 ? (totalSpent / budget.amount) * 100 : 0;
 
@@ -57,7 +57,7 @@ export const getBudgetById = async (req: any, res: Response): Promise<void> => {
         date: { $gte: startDate, $lte: endDate },
       });
 
-      const totalSpent = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+      const totalSpent = expenses.reduce((sum: number, expense: any) => sum + expense.amount, 0);
       const remaining = budget.amount - totalSpent;
       const percentage = budget.amount > 0 ? (totalSpent / budget.amount) * 100 : 0;
 

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Expense, Budget, Income } from '../models';
+import { Expense, Budget, Income } from '../models/index.js';
 
 export const getFinancialInsights = async (req: any, res: Response): Promise<void> => {
   try {
@@ -25,11 +25,11 @@ export const getFinancialInsights = async (req: any, res: Response): Promise<voi
       }),
     ]);
 
-    const totalExpense = expenses.reduce((sum, exp) => sum + exp.amount, 0);
-    const totalIncome = income.reduce((sum, inc) => sum + inc.amount, 0);
+    const totalExpense = expenses.reduce((sum: number, exp: any) => sum + exp.amount, 0);
+    const totalIncome = income.reduce((sum: number, inc: any) => sum + inc.amount, 0);
     const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpense) / totalIncome) * 100 : 0;
 
-    const categorySpending: Record<string, number> = expenses.reduce((acc, exp) => {
+    const categorySpending: Record<string, number> = expenses.reduce((acc: Record<string, number>, exp: any) => {
       acc[exp.category] = (acc[exp.category] || 0) + exp.amount;
       return acc;
     }, {} as Record<string, number>);
@@ -39,7 +39,7 @@ export const getFinancialInsights = async (req: any, res: Response): Promise<voi
     const recommendations = [];
 
     // Analyze spending vs budgets
-    budgets.forEach((budget) => {
+    budgets.forEach((budget: any) => {
       const spent = categorySpending[budget.category] || 0;
       const percentage = (spent / budget.amount) * 100;
       
@@ -128,7 +128,7 @@ export const getFinancialInsights = async (req: any, res: Response): Promise<voi
       }),
     ]);
 
-    const prevTotalExpense = prevExpenses.reduce((sum, exp) => sum + exp.amount, 0);
+    const prevTotalExpense = prevExpenses.reduce((sum: number, exp: any) => sum + exp.amount, 0);
     const expenseChange = totalExpense - prevTotalExpense;
     const expenseChangePercent = prevTotalExpense > 0 ? (expenseChange / prevTotalExpense) * 100 : 0;
 

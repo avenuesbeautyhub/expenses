@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
-import connectDB from '../config/database';
-import { Debt } from '../models';
+import connectDB from '../config/database.js';
+import { Debt } from '../models/index.js';
 
 async function fixDebtUserIds() {
   try {
