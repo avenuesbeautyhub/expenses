@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { body, validationResult, query } from 'express-validator';
-import { getExpenses, getExpenseById, createExpense, updateExpense, deleteExpense } from '../controllers/expenseController.js';
-import { protect } from '../middleware/auth.js';
+import { getExpenses, getExpenseById, createExpense, updateExpense, deleteExpense } from '../controllers/expenseController';
+import { protect } from '../middleware/auth';
 
 const router = Router();
 
