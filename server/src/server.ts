@@ -15,16 +15,14 @@ import debtRoutes from './routes/debtRoutes';
 
 const app: Application = express();
 
-// Trust proxy for Render deployment
-app.set('trust proxy', true);
-
-connectDB();
+app.set('trust proxy', 1);
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
-  message: 'Too many requests from this IP, please try again later.',
 });
+
+connectDB();
 
 app.use(helmet());
 app.use(cors());
