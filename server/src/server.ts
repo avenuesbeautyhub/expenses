@@ -15,6 +15,9 @@ import debtRoutes from './routes/debtRoutes';
 
 const app: Application = express();
 
+// Trust proxy for Render deployment
+app.set('trust proxy', true);
+
 connectDB();
 
 const limiter = rateLimit({
