@@ -26,12 +26,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, []);
 
-  const loadUser = async () => {
+  const loadUser = async (retries = 2) => {
     try {
       const response = await authAPI.getProfile();
       setUser(response.data);
-    } catch (error) {
-      localStorage.removeItem('token');
+    } catch (error: any) {
+      // Only remove token on 401 unauthorized, not network errors
+      if (error.response?.status === 401) {
+        localStorage.removeItem('token');
+      } else if (retries > 0) {
+        // Retry on network errors or server errors (cold start)
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        return loadUser(retries - 1);
+      }
     } finally {
       setLoading(false);
     }
