@@ -5,6 +5,7 @@ type BackendStatus = 'connected' | 'disconnected' | 'connecting';
 interface BackendStatusContextType {
   status: BackendStatus;
   lastChecked: Date | null;
+  checkBackend: () => Promise<void>;
 }
 
 const BackendStatusContext = createContext<BackendStatusContextType | undefined>(undefined);
@@ -29,12 +30,10 @@ export const BackendStatusProvider: React.FC<{ children: ReactNode }> = ({ child
 
   useEffect(() => {
     checkBackend();
-    const interval = setInterval(checkBackend, 3000); // Check every 10 seconds
-    return () => clearInterval(interval);
   }, []);
 
   return (
-    <BackendStatusContext.Provider value={{ status, lastChecked }}>
+    <BackendStatusContext.Provider value={{ status, lastChecked, checkBackend }}>
       {children}
     </BackendStatusContext.Provider>
   );

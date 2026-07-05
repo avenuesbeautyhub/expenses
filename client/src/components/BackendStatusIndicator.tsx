@@ -1,9 +1,9 @@
 import React from 'react';
 import { useBackendStatus } from '../context/BackendStatusContext';
-import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { CheckCircle, XCircle, Loader2, RefreshCw } from 'lucide-react';
 
 const BackendStatusIndicator: React.FC = () => {
-  const { status, lastChecked } = useBackendStatus();
+  const { status, lastChecked, checkBackend } = useBackendStatus();
 
   const getStatusConfig = () => {
     switch (status) {
@@ -40,6 +40,15 @@ const BackendStatusIndicator: React.FC = () => {
     <div className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-4 py-2 rounded-lg border ${config.bgColor} ${config.textColor} ${config.borderColor} flex items-center gap-2 shadow-lg`}>
       {config.icon}
       <span className="text-sm font-medium">{config.text}</span>
+      {status === 'disconnected' && (
+        <button
+          onClick={checkBackend}
+          className="ml-2 p-1 hover:bg-black/10 rounded transition-colors"
+          title="Retry connection"
+        >
+          <RefreshCw className="w-4 h-4" />
+        </button>
+      )}
       {lastChecked && (
         <span className="text-xs opacity-70 ml-2">
           Last checked: {lastChecked.toLocaleTimeString()}

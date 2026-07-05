@@ -21,7 +21,7 @@ router.get(
     query('limit').optional().isInt({ min: 1, max: 100 }).withMessage('Limit must be between 1 and 100'),
     query('sortBy').optional().isIn(['date', 'amount', 'title', 'dueDate']).withMessage('Invalid sort field'),
     query('sortOrder').optional().isIn(['asc', 'desc']).withMessage('Invalid sort order'),
-    query('type').optional().isIn(['borrow', 'return']).withMessage('Invalid debt type'),
+    query('type').optional().isIn(['borrow', 'lend']).withMessage('Invalid debt type'),
     query('status').optional().isIn(['pending', 'partially_returned', 'returned']).withMessage('Invalid status'),
   ],
   handleValidationErrors,
@@ -34,7 +34,7 @@ router.post(
   [
     body('title').trim().notEmpty().withMessage('Title is required'),
     body('amount').isFloat({ min: 0 }).withMessage('Amount must be a positive number'),
-    body('type').isIn(['borrow', 'return']).withMessage('Invalid debt type'),
+    body('type').isIn(['borrow', 'lend']).withMessage('Invalid debt type'),
     body('personName').trim().notEmpty().withMessage('Person name is required'),
     body('date').optional().isISO8601().withMessage('Invalid date format'),
     body('dueDate').optional().isISO8601().withMessage('Invalid due date format'),
@@ -52,7 +52,7 @@ router.put(
   [
     body('title').optional().trim().notEmpty().withMessage('Title cannot be empty'),
     body('amount').optional().isFloat({ min: 0 }).withMessage('Amount must be a positive number'),
-    body('type').optional().isIn(['borrow', 'return']).withMessage('Invalid debt type'),
+    body('type').optional().isIn(['borrow', 'lend']).withMessage('Invalid debt type'),
     body('personName').optional().trim().notEmpty().withMessage('Person name cannot be empty'),
     body('date').optional().isISO8601().withMessage('Invalid date format'),
     body('dueDate').optional().isISO8601().withMessage('Invalid due date format'),
