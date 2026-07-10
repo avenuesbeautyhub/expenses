@@ -36,17 +36,46 @@ const Dashboard: React.FC = () => {
       const debts = response.data.debts || response.data;
       
       let borrowed = 0;
+      let borrowedReturned = 0;
       let lent = 0;
+      let lentReceived = 0;
       
       debts.forEach((debt: any) => {
-        if (debt.type === 'borrow' && debt.status !== 'returned') {
-          borrowed += debt.amount - (debt.returnedAmount || 0);
-        } else if (debt.type === 'lend' && debt.status !== 'returned') {
-          lent += debt.amount - (debt.returnedAmount || 0);
+        if (debt.type === 'borrow') {
+          // If status is returned, this is a repayment entry (legacy data)
+          if (debt.status === 'returned') {
+            borrowedReturned += debt.amount;
+          } else {
+            // This is an actual borrow entry
+            borrowed += debt.amount;
+            // Use returnedAmount if available
+            if (debt.returnedAmount > 0) {
+              borrowedReturned += debt.returnedAmount;
+            }
+          }
+        } else if (debt.type === 'lend') {
+          // If status is returned, this is a repayment entry (legacy data)
+          if (debt.status === 'returned') {
+            lentReceived += debt.amount;
+          } else {
+            // This is an actual lend entry
+            lent += debt.amount;
+            // Use returnedAmount if available
+            if (debt.returnedAmount > 0) {
+              lentReceived += debt.returnedAmount;
+            }
+          }
         }
       });
       
-      setDebtSummary({ borrowed, lent, net: lent - borrowed });
+      // Net: (owed to you) - (you owe)
+      // Owed to you = lent - lentReceived (money they borrowed - money they returned)
+      // You owe = borrowed - borrowedReturned (money you borrowed - money you returned)
+      const owedToYou = lent - lentReceived;
+      const youOwe = borrowed - borrowedReturned;
+      const net = owedToYou - youOwe;
+      
+      setDebtSummary({ borrowed: youOwe, lent: owedToYou, net });
     } catch (error) {
       console.error('Failed to load debt summary:', error);
     }
