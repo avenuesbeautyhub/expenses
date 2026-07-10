@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Wallet, TrendingUp, PieChart, Settings, LogOut, Menu, X, Bell, ArrowDownCircle } from 'lucide-react';
+import { LayoutDashboard, Wallet, TrendingUp, PieChart, Settings, LogOut, Menu, X, Bell, ArrowDownCircle, Lightbulb } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Sidebar: React.FC = () => {
@@ -16,6 +16,7 @@ const Sidebar: React.FC = () => {
     { path: '/debts', icon: ArrowDownCircle, label: 'Debts' },
     { path: '/reminders', icon: Bell, label: 'Reminders' },
     { path: '/reports', icon: PieChart, label: 'Reports' },
+    { path: '/insights', icon: Lightbulb, label: 'Insights' },
     { path: '/settings', icon: Settings, label: 'Settings' },
   ];
 

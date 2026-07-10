@@ -16,6 +16,7 @@ import Reports from './pages/Reports';
 import Reminders from './pages/Reminders';
 import Settings from './pages/Settings';
 import Debts from './pages/Debts';
+import Insights from './pages/Insights';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
@@ -123,6 +124,16 @@ function App() {
                 <ProtectedRoute>
                   <Layout>
                     <Reports />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/insights"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Insights />
                   </Layout>
                 </ProtectedRoute>
               }

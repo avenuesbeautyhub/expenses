@@ -32,7 +32,7 @@ router.post(
   [
     body('title').trim().notEmpty().withMessage('Title is required'),
     body('amount').isFloat({ min: 0 }).withMessage('Amount must be a positive number'),
-    body('category').isIn(['Food', 'Grocery', 'Fuel', 'Rent', 'Shopping', 'Entertainment', 'Medical', 'Education', 'EMI', 'Bills', 'Travel', 'Insurance', 'Gifts', 'Investment', 'Others']).withMessage('Invalid category'),
+    body('category').isIn(['Food', 'Grocery', 'Fuel', 'Vehicle Service', 'Pollution', 'Vehicle Maintenance', 'Parking', 'Toll', 'Rent', 'Shopping', 'Entertainment', 'Medical', 'Education', 'EMI', 'Bills', 'Travel', 'Insurance', 'Gifts', 'Investment', 'Others']).withMessage('Invalid category'),
     body('date').optional().isISO8601().withMessage('Invalid date format'),
     body('paymentMethod').isIn(['Cash', 'UPI', 'Credit Card', 'Debit Card', 'Bank Transfer', 'Wallet', 'Others']).withMessage('Invalid payment method'),
     body('notes').optional().trim(),
@@ -50,7 +50,7 @@ router.put(
   [
     body('title').optional().trim().notEmpty().withMessage('Title cannot be empty'),
     body('amount').optional().isFloat({ min: 0 }).withMessage('Amount must be a positive number'),
-    body('category').optional().isIn(['Food', 'Grocery', 'Fuel', 'Rent', 'Shopping', 'Entertainment', 'Medical', 'Education', 'EMI', 'Bills', 'Travel', 'Insurance', 'Gifts', 'Investment', 'Others']).withMessage('Invalid category'),
+    body('category').optional().isIn(['Food', 'Grocery', 'Fuel', 'Vehicle Service', 'Pollution', 'Vehicle Maintenance', 'Parking', 'Toll', 'Rent', 'Shopping', 'Entertainment', 'Medical', 'Education', 'EMI', 'Bills', 'Travel', 'Insurance', 'Gifts', 'Investment', 'Others']).withMessage('Invalid category'),
     body('date').optional().isISO8601().withMessage('Invalid date format'),
     body('paymentMethod').optional().isIn(['Cash', 'UPI', 'Credit Card', 'Debit Card', 'Bank Transfer', 'Wallet', 'Others']).withMessage('Invalid payment method'),
     body('notes').optional().trim(),

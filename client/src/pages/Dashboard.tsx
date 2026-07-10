@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { analyticsAPI } from '../services/api';
+import { analyticsAPI, debtAPI } from '../services/api';
 import { DashboardData } from '../types';
-import { DollarSign, TrendingUp, TrendingDown, Wallet, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { DollarSign, TrendingUp, TrendingDown, Wallet, ArrowUpRight, ArrowDownRight, ArrowDownCircle } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { useAuth } from '../context/AuthContext';
 import { getCurrencySymbol } from '../utils/currency';
@@ -11,10 +11,12 @@ const Dashboard: React.FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState<'month' | 'year' | 'all'>('month');
+  const [debtSummary, setDebtSummary] = useState({ borrowed: 0, lent: 0, net: 0 });
   const currencySymbol = getCurrencySymbol(user?.currency || 'USD');
 
   useEffect(() => {
     loadDashboardData();
+    loadDebtSummary();
   }, [period]);
 
   const loadDashboardData = async () => {
@@ -25,6 +27,28 @@ const Dashboard: React.FC = () => {
       console.error('Failed to load dashboard data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadDebtSummary = async () => {
+    try {
+      const response = await debtAPI.getDebts({ limit: 100 });
+      const debts = response.data.debts || response.data;
+      
+      let borrowed = 0;
+      let lent = 0;
+      
+      debts.forEach((debt: any) => {
+        if (debt.type === 'borrow' && debt.status !== 'returned') {
+          borrowed += debt.amount - (debt.returnedAmount || 0);
+        } else if (debt.type === 'lend' && debt.status !== 'returned') {
+          lent += debt.amount - (debt.returnedAmount || 0);
+        }
+      });
+      
+      setDebtSummary({ borrowed, lent, net: lent - borrowed });
+    } catch (error) {
+      console.error('Failed to load debt summary:', error);
     }
   };
 
@@ -127,6 +151,44 @@ const Dashboard: React.FC = () => {
           icon={DollarSign}
           isPositive={data.savings >= 0}
         />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="card">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">You Owe</p>
+              <p className="text-2xl font-bold mt-1 text-red-600">{currencySymbol}{debtSummary.borrowed.toLocaleString()}</p>
+            </div>
+            <div className="p-3 rounded-full bg-red-100">
+              <ArrowDownCircle className="text-red-600" size={24} />
+            </div>
+          </div>
+        </div>
+        <div className="card">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Owed to You</p>
+              <p className="text-2xl font-bold mt-1 text-green-600">{currencySymbol}{debtSummary.lent.toLocaleString()}</p>
+            </div>
+            <div className="p-3 rounded-full bg-green-100">
+              <ArrowUpRight className="text-green-600" size={24} />
+            </div>
+          </div>
+        </div>
+        <div className="card">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Net Debt</p>
+              <p className={`text-2xl font-bold mt-1 ${debtSummary.net >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                {debtSummary.net >= 0 ? '+' : ''}{currencySymbol}{debtSummary.net.toLocaleString()}
+              </p>
+            </div>
+            <div className={`p-3 rounded-full ${debtSummary.net >= 0 ? 'bg-green-100' : 'bg-red-100'}`}>
+              <Wallet className={debtSummary.net >= 0 ? 'text-green-600' : 'text-red-600'} size={24} />
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
