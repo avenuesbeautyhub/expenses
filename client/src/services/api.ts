@@ -72,7 +72,7 @@ export const budgetAPI = {
 };
 
 export const analyticsAPI = {
-  getDashboard: () => api.get('/analytics/dashboard'),
+  getDashboard: (params?: any) => api.get('/analytics/dashboard', { params }),
   getReports: (params?: any) => api.get('/analytics/reports', { params }),
   getMonthlyTrend: (params?: any) => api.get('/analytics/monthly-trend', { params }),
 };

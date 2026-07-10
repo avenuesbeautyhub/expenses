@@ -3,9 +3,19 @@ import { Expense, Income } from '../models/index';
 
 export const getDashboardData = async (req: any, res: Response): Promise<void> => {
   try {
+    const { period = 'month' } = req.query;
     const now = new Date();
-    const startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000); // 30 days ago
+    let startDate: Date;
     const endDate = new Date();
+
+    if (period === 'year') {
+      startDate = new Date(now.getFullYear(), 0, 1); // Start of current year
+    } else if (period === 'all') {
+      startDate = new Date(0); // Beginning of time
+    } else {
+      // Default to month (last 30 days)
+      startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    }
 
     const totalExpenses = await Expense.find({
       user: req.user._id,
