@@ -34,7 +34,7 @@ const ExpenseSchema: Schema = new Schema(
     category: {
       type: String,
       required: [true, 'Please provide a category'],
-      enum: ['Food', 'Grocery', 'Fuel', 'Rent', 'Shopping', 'Entertainment', 'Medical', 'Education', 'EMI', 'Bills', 'Travel', 'Insurance', 'Gifts', 'Investment', 'Others'],
+      enum: ['Food', 'Grocery', 'Fuel', 'Vehicle Service', 'Pollution', 'Vehicle Maintenance', 'Parking', 'Toll', 'Rent', 'Shopping', 'Entertainment', 'Medical', 'Education', 'EMI', 'Bills', 'Travel', 'Insurance', 'Gifts', 'Investment', 'Others'],
     },
     date: {
       type: Date,
