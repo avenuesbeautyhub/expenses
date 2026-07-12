@@ -15,7 +15,7 @@ const SavingsGoals: React.FC = () => {
   const [editingGoal, setEditingGoal] = useState<SavingsGoal | null>(null);
   const [contributingGoal, setContributingGoal] = useState<SavingsGoal | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>('all');
-  const currencySymbol = getCurrencySymbol(user?.currency);
+  const currencySymbol = getCurrencySymbol(user?.currency || 'INR');
 
   const loadGoals = async () => {
     try {
