@@ -12,6 +12,7 @@ import analyticsRoutes from './routes/analyticsRoutes';
 import reminderRoutes from './routes/reminderRoutes';
 import insightsRoutes from './routes/insightsRoutes';
 import debtRoutes from './routes/debtRoutes';
+import savingsGoalRoutes from './routes/savingsGoalRoutes';
 
 const app: Application = express();
 
@@ -38,6 +39,7 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/reminders', reminderRoutes);
 app.use('/api/insights', insightsRoutes);
 app.use('/api/debts', debtRoutes);
+app.use('/api/savings-goals', savingsGoalRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Expense Tracker API is running' });

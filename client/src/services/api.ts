@@ -99,4 +99,13 @@ export const debtAPI = {
   deleteDebt: (id: string) => api.delete(`/debts/${id}`),
 };
 
+export const savingsGoalAPI = {
+  getSavingsGoals: (params?: any) => api.get('/savings-goals', { params }),
+  getSavingsGoalById: (id: string) => api.get(`/savings-goals/${id}`),
+  createSavingsGoal: (data: any) => api.post('/savings-goals', data),
+  updateSavingsGoal: (id: string, data: any) => api.put(`/savings-goals/${id}`, data),
+  addContribution: (id: string, data: { amount: number }) => api.post(`/savings-goals/${id}/contribute`, data),
+  deleteSavingsGoal: (id: string) => api.delete(`/savings-goals/${id}`),
+};
+
 export default api;

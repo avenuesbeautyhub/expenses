@@ -69,12 +69,15 @@ export const createDebt = async (req: any, res: Response): Promise<void> => {
 
     console.log('Creating debt with data:', { title, amount, type, personName, date, dueDate, notes });
 
+    // Normalize person name to avoid case-sensitive duplicates
+    const normalizedPersonName = personName.trim().charAt(0).toUpperCase() + personName.trim().slice(1).toLowerCase();
+
     const debt = await Debt.create({
       user: req.user._id,
       title,
       amount,
       type,
-      personName,
+      personName: normalizedPersonName,
       date,
       dueDate,
       notes,
@@ -98,7 +101,7 @@ export const updateDebt = async (req: any, res: Response): Promise<void> => {
       debt.title = title || debt.title;
       debt.amount = amount !== undefined ? amount : debt.amount;
       debt.type = type || debt.type;
-      debt.personName = personName || debt.personName;
+      debt.personName = personName ? personName.trim().charAt(0).toUpperCase() + personName.trim().slice(1).toLowerCase() : debt.personName;
       debt.date = date || debt.date;
       debt.dueDate = dueDate !== undefined ? dueDate : debt.dueDate;
       debt.status = status || debt.status;

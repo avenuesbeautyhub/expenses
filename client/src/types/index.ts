@@ -56,13 +56,27 @@ export interface Debt {
   user: string;
   title: string;
   amount: number;
-  type: 'borrow' | 'lend';
+  type: 'borrow' | 'lend' | 'return';
   personName: string;
   date: string;
   dueDate?: string;
   status: 'pending' | 'partially_returned' | 'returned';
   returnedAmount: number;
   notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SavingsGoal {
+  _id: string;
+  user: string;
+  title: string;
+  targetAmount: number;
+  currentAmount: number;
+  category: string;
+  targetDate: string;
+  status: 'active' | 'completed' | 'paused';
+  description?: string;
   createdAt: string;
   updatedAt: string;
 }
