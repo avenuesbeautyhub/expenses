@@ -4,7 +4,7 @@ export interface IDebt extends Document {
   user: mongoose.Types.ObjectId;
   title: string;
   amount: number;
-  type: 'borrow' | 'lend';
+  type: 'borrow' | 'lend' | 'return';
   personName: string;
   date: Date;
   dueDate?: Date;
@@ -35,7 +35,7 @@ const DebtSchema: Schema = new Schema(
     type: {
       type: String,
       required: [true, 'Please provide a debt type'],
-      enum: ['borrow', 'lend'],
+      enum: ['borrow', 'lend', 'return'],
     },
     personName: {
       type: String,

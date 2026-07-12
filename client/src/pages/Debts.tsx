@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { getCurrencySymbol } from '../utils/currency';
 import Modal from '../components/Modal';
 
-const DEBT_TYPES = ['borrow', 'lend'] as const;
+const DEBT_TYPES = ['borrow', 'lend', 'return'] as const;
 const DEBT_STATUSES = ['pending', 'partially_returned', 'returned'] as const;
 
 const Debts: React.FC = () => {
@@ -74,7 +74,10 @@ const Debts: React.FC = () => {
   };
 
   const getTypeColor = (type: string) => {
-    return type === 'borrow' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700';
+    if (type === 'borrow') return 'bg-red-100 text-red-700';
+    if (type === 'lend') return 'bg-blue-100 text-blue-700';
+    if (type === 'return') return 'bg-green-100 text-green-700';
+    return 'bg-gray-100 text-gray-700';
   };
 
   // Calculate remaining balance per person
@@ -110,6 +113,12 @@ const Debts: React.FC = () => {
             summary[debt.personName].lentReceived += debt.returnedAmount;
           }
         }
+      } else if (debt.type === 'return') {
+        // New return type entry - add as repayment
+        // We need to determine if this is returning borrowed money or receiving lent money
+        // For now, we'll treat it as a general return entry
+        // This will need context to know which original debt it's returning
+        summary[debt.personName].borrowedReturned += debt.amount;
       }
 
       // Net: (owed to you) - (you owe)
@@ -321,10 +330,15 @@ const Debts: React.FC = () => {
                           <ArrowDownCircle size={14} />
                           Borrow
                         </span>
-                      ) : (
+                      ) : debt.type === 'lend' ? (
                         <span className="flex items-center gap-1">
                           <ArrowDownCircle size={14} />
                           Lend
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-1">
+                          <ArrowUpCircle size={14} />
+                          Return
                         </span>
                       )}
                     </span>
@@ -423,6 +437,7 @@ const Debts: React.FC = () => {
       {showModal && (
         <DebtModal
           debt={editingDebt}
+          existingDebts={debts}
           onClose={() => {
             setShowModal(false);
             setEditingDebt(null);
@@ -458,7 +473,8 @@ const DebtModal: React.FC<{
   debt: Debt | null;
   onClose: () => void;
   onSave: () => void;
-}> = ({ debt, onClose, onSave }) => {
+  existingDebts: Debt[];
+}> = ({ debt, onClose, onSave, existingDebts }) => {
   const [formData, setFormData] = useState({
     title: debt?.title || '',
     amount: debt?.amount || 0,
@@ -468,6 +484,37 @@ const DebtModal: React.FC<{
     dueDate: debt?.dueDate ? new Date(debt.dueDate).toISOString().split('T')[0] : '',
     notes: debt?.notes || '',
   });
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  // Get unique person names based on debt type
+  const suggestions = React.useMemo(() => {
+    const uniqueNames = new Set<string>();
+    existingDebts.forEach(d => {
+      if (formData.type === 'return') {
+        // For return type, show people who have existing borrow or lend debts
+        if (d.type === 'borrow' || d.type === 'lend') {
+          uniqueNames.add(d.personName);
+        }
+      } else {
+        // For borrow/lend, show all existing person names
+        uniqueNames.add(d.personName);
+      }
+    });
+    return Array.from(uniqueNames).sort();
+  }, [existingDebts, formData.type]);
+
+  // Close dropdown when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -525,23 +572,49 @@ const DebtModal: React.FC<{
               <label className="label">Type</label>
               <select
                 value={formData.type}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value as 'borrow' | 'lend' })}
+                onChange={(e) => setFormData({ ...formData, type: e.target.value as 'borrow' | 'lend' | 'return' })}
                 className="input"
                 required
               >
                 <option value="borrow">Borrow (you owe someone)</option>
                 <option value="lend">Lend (someone owes you)</option>
+                <option value="return">Return (repayment)</option>
               </select>
             </div>
             <div>
               <label className="label">Person Name</label>
-              <input
-                type="text"
-                value={formData.personName}
-                onChange={(e) => setFormData({ ...formData, personName: e.target.value })}
-                className="input"
-                required
-              />
+              <div className="relative" ref={dropdownRef}>
+                <input
+                  type="text"
+                  value={formData.personName}
+                  onChange={(e) => {
+                    setFormData({ ...formData, personName: e.target.value });
+                    setShowSuggestions(true);
+                  }}
+                  onFocus={() => setShowSuggestions(true)}
+                  className="input"
+                  required
+                />
+                {showSuggestions && suggestions.length > 0 && (
+                  <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg max-h-48 overflow-y-auto">
+                    {suggestions
+                      .filter(name => name.toLowerCase().includes(formData.personName.toLowerCase()))
+                      .map((name) => (
+                      <div
+                        key={name}
+                        className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-900 dark:text-white"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setFormData({ ...formData, personName: name });
+                          setShowSuggestions(false);
+                        }}
+                      >
+                        {name}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
             <div>
               <label className="label">Date</label>
