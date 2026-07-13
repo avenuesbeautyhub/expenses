@@ -87,7 +87,7 @@ export const reminderAPI = {
 };
 
 export const insightsAPI = {
-  getInsights: () => api.get('/insights'),
+  getInsights: (params?: any) => api.get('/insights', { params }),
 };
 
 export const debtAPI = {
